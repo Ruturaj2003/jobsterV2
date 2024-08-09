@@ -18,29 +18,51 @@ const Register = () => {
     e.preventDefault();
     console.log(e.target);
   };
+
+  const toggleMember = () => {
+    setValues({ ...values, isMember: !values.isMember });
+  };
   return (
     <Wrapper className="full-page">
       <form className="form" onSubmit={onSubmit}>
         <Logo></Logo>
-        <h3>Login</h3>
-        {/* Name Field */}
-        <FormRow
-          type={'text'}
-          value={values.name}
-          labelText={'Name'}
-          name={'name'}
-          handleChange={handleChange}
-        ></FormRow>
+        <h3>{values.isMember ? 'Login' : 'Register'}</h3>
+
+        {!values.isMember && (
+          // Name Field
+          <FormRow
+            type={'text'}
+            value={values.name}
+            labelText={'Name'}
+            name={'name'}
+            handleChange={handleChange}
+          ></FormRow>
+        )}
+
         {/* Email Field */}
         <FormRow
           type={'email'}
           value={values.email}
-          labelText={'email'}
+          labelText={'Email'}
           name={'Email'}
+          handleChange={handleChange}
+        ></FormRow>
+        {/* Password Field */}
+        <FormRow
+          type={'password'}
+          value={values.password}
+          labelText={'Password'}
+          name={'password'}
           handleChange={handleChange}
         ></FormRow>
         {/* Submit */}
         <button className="btn btn-block">Submit</button>
+        <p>
+          {values.isMember ? 'Not a member yet? ' : 'Already a member'}
+          <button onClick={toggleMember} type="button" className="member-btn">
+            {!values.isMember ? 'Login' : 'Register'}
+          </button>
+        </p>
       </form>
     </Wrapper>
   );
