@@ -4,7 +4,7 @@ const FormRow = ({ type, name, value, handleChange, labelText }) => {
       <label htmlFor={name}>{labelText || name}</label>
       <input
         type={type}
-        name="name"
+        name={name}
         id={name}
         className="form-input"
         autoComplete="off"

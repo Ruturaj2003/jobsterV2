@@ -11,6 +11,11 @@ const Register = () => {
   const [values, setValues] = useState(initialState);
 
   const handleChange = (e) => {
+    const valueName = e.target.name;
+    const value = e.target.value;
+
+    setValues({ ...values, [valueName]: value });
+
     console.log(e.target);
   };
 
@@ -44,7 +49,7 @@ const Register = () => {
           type={'email'}
           value={values.email}
           labelText={'Email'}
-          name={'Email'}
+          name={'email'}
           handleChange={handleChange}
         ></FormRow>
         {/* Password Field */}
