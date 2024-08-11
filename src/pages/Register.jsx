@@ -19,7 +19,6 @@ const Register = () => {
   useEffect(() => {
     if (user) {
       navigate('/');
-      toast('Welcome Back ');
     }
   }, [user, navigate]);
   const handleChange = (e) => {
