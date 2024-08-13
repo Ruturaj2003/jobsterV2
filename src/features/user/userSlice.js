@@ -110,6 +110,7 @@ const userSlice = createSlice({
         const { user } = payload;
         state.isLoading = false;
         state.user = user;
+        addUserToLocalStorage(user);
         toast.success('Details Updated Successfully');
       });
   },
