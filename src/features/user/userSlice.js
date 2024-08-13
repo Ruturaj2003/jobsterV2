@@ -13,6 +13,25 @@ const initialState = {
   user: getUserFromLocalStorage(),
 };
 
+export const updateUser = createAsyncThunk(
+  'user/updateUser',
+  async (user, thunkApi) => {
+    try {
+      console.log(thunkApi.getState().user.user.token);
+      const resp = await customFetch.patch('/auth/updateUser', user, {
+        headers: {
+          authorization: `Bearer ${thunkApi.getState().user.user.token}`,
+        },
+      });
+      console.log(thunkApi.getState().user.user.token);
+
+      return resp.data;
+    } catch (error) {
+      return thunkApi.rejectWithValue(error.response.data.msg);
+    }
+  }
+);
+
 export const registerUser = createAsyncThunk(
   'user/registerUser',
   async (user, thunkApi) => {
@@ -79,6 +98,19 @@ const userSlice = createSlice({
       .addCase(loginUser.rejected, (state, { payload }) => {
         state.isLoading = false;
         toast.error(payload);
+      })
+      .addCase(updateUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateUser.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        toast.error(payload);
+      })
+      .addCase(updateUser.fulfilled, (state, { payload }) => {
+        const { user } = payload;
+        state.isLoading = false;
+        state.user = user;
+        toast.success('Details Updated Successfully');
       });
   },
 });
