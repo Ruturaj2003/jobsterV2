@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import customFetch from '../../utils/axios';
-import { getUserFromLocalStorage } from '../../utils/localStorage';
+
 import { toast } from 'react-toastify';
 
 const initialState = {
