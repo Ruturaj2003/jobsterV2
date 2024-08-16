@@ -50,6 +50,8 @@ export const deleteJob = createAsyncThunk(
       });
       thunkAPI.dispatch(getAllJobs());
     } catch (error) {
+      toast.error('something went wrong');
+      thunkAPI.dispatch(hideLoading);
       return thunkAPI.rejectWithValue('There was a Problem Deleting Job');
     }
   }
