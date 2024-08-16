@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import customFetch from '../../utils/axios';
 
 import { toast } from 'react-toastify';
+import { getAllJobs, hideLoading, showLoading } from '../allJobs/allJobsSlice';
 
 const initialState = {
   isLoading: false,
@@ -37,6 +38,23 @@ export const createJob = createAsyncThunk(
   }
 );
 
+export const deleteJob = createAsyncThunk(
+  'job/deleteJob',
+  async (jobId, thunkAPI) => {
+    thunkAPI.dispatch(showLoading());
+    try {
+      const resp = await customFetch.delete(`/jobs/${jobId}`, {
+        headers: {
+          authorization: `Bearer ${thunkAPI.getState().user.user.token}`,
+        },
+      });
+      thunkAPI.dispatch(getAllJobs());
+    } catch (error) {
+      return thunkAPI.rejectWithValue('There was a Problem Deleting Job');
+    }
+  }
+);
+
 const jobSlice = createSlice({
   name: 'job',
   initialState: initialState,
@@ -62,6 +80,9 @@ const jobSlice = createSlice({
       .addCase(createJob.rejected, (state, { payload }) => {
         state.isLoading = false;
         toast.error(payload);
+      })
+      .addCase(deleteJob.fulfilled, (state) => {
+        toast.success('Deletion successful');
       });
   },
 });
