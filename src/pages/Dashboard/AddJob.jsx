@@ -1,12 +1,14 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { FormRow, FormRowSelect } from '../../components';
+import { FormRow, FormRowSelect, JobInfo } from '../../components';
 import Wrapper from '../../assets/wrappers/DashboardFormPage';
 import { toast } from 'react-toastify';
 import {
   clearValues,
   createJob,
+  editJob,
   handleChange,
 } from '../../features/job/jobSlice';
+import { useNavigate } from 'react-router-dom';
 
 const AddJob = () => {
   const {
@@ -22,7 +24,7 @@ const AddJob = () => {
     editJobId,
   } = useSelector((store) => store.job);
   const dispatch = useDispatch();
-
+  const nav = useNavigate();
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -30,6 +32,23 @@ const AddJob = () => {
       toast.error('Fill All Fields');
       return;
     }
+
+    if (isEditing) {
+      dispatch(
+        editJob({
+          jobId: editJobId,
+          job: {
+            position,
+            company,
+            jobLocation,
+            jobType,
+            status,
+          },
+        })
+      );
+      return nav('/all-jobs');
+    }
+
     dispatch(createJob({ position, company, jobLocation, jobType, status }));
   };
 
