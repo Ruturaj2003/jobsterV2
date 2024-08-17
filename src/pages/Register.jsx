@@ -88,6 +88,7 @@ const Register = () => {
         {values.isMember && (
           <button
             type="button"
+            disabled={isLoading}
             className="btn btn-block btn-hipster"
             onClick={() => {
               dispatch(
