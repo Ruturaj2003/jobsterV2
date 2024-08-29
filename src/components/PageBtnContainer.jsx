@@ -33,9 +33,10 @@ const PageBtnContainer = () => {
       </button>
 
       <div className="btn-container">
-        {pages.map((pageNumber) => {
+        {pages.map((pageNumber, index) => {
           return (
             <button
+              key={index}
               type="button"
               className={pageNumber === page ? 'pageBtn active' : 'pageBtn'}
               onClick={() => dispatch(changePage(pageNumber))}
