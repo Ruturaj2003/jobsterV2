@@ -1,6 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
-import customFetch, { authHeader } from '../../utils/axios';
+import customFetch, {
+  authHeader,
+  checkForUnauthorizedResponse,
+} from '../../utils/axios';
 
 const initialFiltersState = {
   search: '',
@@ -54,7 +57,7 @@ export const getAllJobs = createAsyncThunk(
       console.log(resp.data);
       return resp.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue('There was an Error');
+      return checkForUnauthorizedResponse(error, thunkAPI);
     }
   }
 );
@@ -79,6 +82,7 @@ const allJobsSlice = createSlice({
     changePage: (state, { payload }) => {
       state.page = payload;
     },
+    clearAllJobsState: () => initialState,
   },
   extraReducers: (builder) => {
     builder
@@ -117,4 +121,6 @@ export const {
   handleChange,
   clearFilters,
   changePage,
+
+  clearAllJobsState,
 } = allJobsSlice.actions;

@@ -1,5 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import customFetch, { authHeader } from '../../utils/axios';
+import customFetch, {
+  authHeader,
+  checkForUnauthorizedResponse,
+} from '../../utils/axios';
 
 import { toast } from 'react-toastify';
 import { getAllJobs, hideLoading, showLoading } from '../allJobs/allJobsSlice';
@@ -25,11 +28,7 @@ export const createJob = createAsyncThunk(
       thunkApi.dispatch(clearValues());
       return resp.data;
     } catch (error) {
-      if (error.response.status === 401) {
-        thunkApi.dispatch(logoutUser());
-        return thunkApi.rejectWithValue('Unauthorized Logging you out..');
-      }
-      return thunkApi.rejectWithValue(error.response.data.msg);
+      return checkForUnauthorizedResponse(error, thunkApi);
     }
   }
 );
@@ -47,7 +46,7 @@ export const deleteJob = createAsyncThunk(
     } catch (error) {
       toast.error('something went wrong');
       thunkAPI.dispatch(hideLoading);
-      return thunkAPI.rejectWithValue('There was a Problem Deleting Job');
+      return checkForUnauthorizedResponse(error, thunkAPI);
     }
   }
 );
@@ -64,7 +63,7 @@ export const editJob = createAsyncThunk(
       thunkAPI.dispatch(clearValues());
       return resp.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data.msg);
+      return checkForUnauthorizedResponse(error, thunkAPI);
     }
   }
 );
